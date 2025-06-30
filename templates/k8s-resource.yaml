@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-resource
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/team-xquare/xquare-onpremise-k8s-resource.git
+    targetRevision: HEAD
+    path: .
+    directory:
+      recurse: false
+      include: "applicationset.yaml"
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
